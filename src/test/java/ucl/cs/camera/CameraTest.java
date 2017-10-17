@@ -59,14 +59,6 @@ public class CameraTest {
     camera.pressShutter();
   }
 
-  public void turningCameraOffDoesNotInterruptWrite(){
-    context.checking(new Expectations(){{
-      exactly(1).of(sensor).powerDown();
-    }});
-    camera.pressShutter();
-    camera.powerOff();
-  }
-
 
 
 }

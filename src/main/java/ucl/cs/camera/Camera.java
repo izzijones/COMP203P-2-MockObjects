@@ -1,17 +1,10 @@
 package ucl.cs.camera;
 
-public class Camera {
+public class Camera implements WriteListener{
   private Sensor sensor;
   private MemoryCard memoryCard;
   private Boolean on = false;
   private Boolean writing = false;
-  private WriteListener writeListener = new WriteListener() {
-      @Override
-      public void writeComplete() {
-          writing = false;
-          notify();
-      }
-  };
 
   public Camera(Sensor s, MemoryCard m){
     sensor = s;
@@ -22,7 +15,6 @@ public class Camera {
     if(on){
       writing = true;
       memoryCard.write(sensor.readData());
-      writeListener.writeComplete();
       sensor.powerDown();
     }
   }
@@ -32,15 +24,16 @@ public class Camera {
     sensor.powerUp();
   }
 
-  public void powerOff() throws InterruptedException {
+  public void powerOff(){
     on = false;
     if (!writing){
       sensor.powerDown();
     }
-    else{
-        wait();
-        sensor.powerDown();
-    }
   }
+
+    @Override
+    public void writeComplete() {
+        writing = false;
+    }
 }
 
